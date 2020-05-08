@@ -15,10 +15,10 @@
 #' S4 \code{shinystan} objects
 #'
 #' @aliases shinystan-class
-#' @description See \code{\link{as.shinystan}} for documentation on creating 
+#' @description See \code{\link{as.shinystan}} for documentation on creating
 #'   \code{shinystan} objects and \code{\link{eight_schools}} for an example
 #'   object.
-#'  
+#'
 #' @slot model_name (\code{"character"}) Model name.
 #' @slot param_names (\code{"character"}) Parameter names.
 #' @slot param_dims (\code{"list"}) Parameter dimensions.
@@ -34,15 +34,15 @@
 #' @slot model_code (\code{"character"}) Model code to display on the
 #'   \strong{Model Code} page in the 'ShinyStan' GUI.
 #' @slot misc (\code{"list"}) Miscellaneous, for internal use.
-#' 
+#'
 #' @template seealso-as.shinystan
 #' @template seealso-drop_parameters
 #' @template seealso-generate_quantity
 #' @seealso \code{\link{shinystan-metadata}} to view or change metadata
 #'   associated with a \code{shinystan} object.
-#'   
+#'
 #' @template reference-muth
-#' 
+#'
 shinystan <- setClass(
   Class = "shinystan",
   slots = list(
@@ -78,10 +78,10 @@ shinystan <- setClass(
 
 
 # create shinystan objects ------------------------------------------------
-  
+
 # as.shinystan (generic) --------------------------------------------------
 #' Create and test \code{shinystan} objects
-#' 
+#'
 #' @description The \code{as.shinystan} function creates \code{shinystan}
 #'   objects that can be used with \code{\link{launch_shinystan}} and various
 #'   other functions in the \pkg{shinystan} package. \code{as.shinystan} is a
@@ -90,7 +90,7 @@ shinystan <- setClass(
 #'   arrays, lists of matrices, \code{stanfit} objects (\pkg{rstan}),
 #'   \code{stanreg} objects (\pkg{rstanarm}), and \code{mcmc.list} objects
 #'   (\pkg{coda}).
-#'   
+#'
 #'   \code{is.shinystan} tests if an object is a \code{shinystan} object.
 #'
 #' @name as.shinystan
@@ -99,15 +99,15 @@ shinystan <- setClass(
 #'   \code{shinystan} object. See the Methods section below. For
 #'   \code{is.shinystan}, an object to check.
 #' @param ... Arguments passed to the individual methods.
-#'   
+#'
 #' @return \code{as.shinystan} returns a \code{shinystan} object, which is an
 #'   instance of S4 class \code{"shinystan"}.
-#'   
+#'
 #'   \code{is.shinystan} returns \code{TRUE} if the tested object is a
 #'   \code{shinystan} object and \code{FALSE} otherwise.
 #'
 #' @template seealso-launch
-#' @template seealso-drop_parameters   
+#' @template seealso-drop_parameters
 #' @template seealso-generate_quantity
 #'
 setGeneric("as.shinystan", function(X, ...) {
@@ -130,33 +130,35 @@ is.shinystan <- function(X) inherits(X, "shinystan")
 #'   argument will be removed in a future release.
 #' @param warmup The number of iterations to treat as warmup. Should be
 #'   \code{0} if warmup iterations are not included in \code{X}.
-#' @param param_dims Rarely used and never necessary. A named list giving the 
-#'   dimensions for all parameters. For scalar parameters use \code{0} as the 
+#' @param param_dims Rarely used and never necessary. A named list giving the
+#'   dimensions for all parameters. For scalar parameters use \code{0} as the
 #'   dimension. See Examples.
 #' @param model_code Optionally, a character string with the code used to run
 #'   the model. This can also be added to your \code{shinystan} object later
-#'   using the \code{\link[shinystan]{model_code}} function. See 
+#'   using the \code{\link[shinystan]{model_code}} function. See
 #'   \code{\link[shinystan]{model_code}} for additional formatting instructions.
-#'   After launching the app the code will be viewable in the \strong{Model 
+#'   After launching the app the code will be viewable in the \strong{Model
 #'   Code} tab. For \code{stanfit} (\pkg{rstan}) and \code{stanreg}
 #'   (\pkg{rstanarm}) objects the model code is automatically retrieved from the
 #'   object.
-#' @param note Optionally, text to display on the \strong{Notepad} page in the 
+#' @param summary Optional output from \link{rstan::monitor}. If
+#'   not provided it is calculated internally.
+#' @param note Optionally, text to display on the \strong{Notepad} page in the
 #'   'ShinyStan' GUI (stored in \code{user_model_info} slot of the
 #'   \code{shinystan} object).
-#' @param sampler_params,algorithm,max_treedepth Rarely used and never 
-#'   necessary. If using the \code{as.shinystan} method for arrays or lists, 
-#'   these arguments can be used to manually provide information that is 
-#'   automatically retrieved from a stanfit object when using the 
-#'   \code{as.shinystan} method for stanfit objects. If specified, 
+#' @param sampler_params,algorithm,max_treedepth Rarely used and never
+#'   necessary. If using the \code{as.shinystan} method for arrays or lists,
+#'   these arguments can be used to manually provide information that is
+#'   automatically retrieved from a stanfit object when using the
+#'   \code{as.shinystan} method for stanfit objects. If specified,
 #'   \code{sampler_params} must have the same structure as an object returned by
-#'   \code{\link[rstan]{get_sampler_params}} (\pkg{rstan}), which is a list of 
-#'   matrices, with one matrix per chain. \code{algorithm}, if specified, must 
+#'   \code{\link[rstan]{get_sampler_params}} (\pkg{rstan}), which is a list of
+#'   matrices, with one matrix per chain. \code{algorithm}, if specified, must
 #'   be either \code{"NUTS"} or \code{"HMC"} (static HMC). If \code{algorithm}
 #'   is \code{"NUTS"} then \code{max_treedepth} (an integer indicating the
 #'   maximum allowed treedepth when the model was fit) must also be provided.
-#'   
-#' @examples  
+#'
+#' @examples
 #' \dontrun{
 #' sso <- as.shinystan(X, ...) # replace ... with optional arguments or omit it
 #' launch_shinystan(sso)
@@ -167,11 +169,12 @@ setMethod(
   signature = "array",
   definition = function(X,
                         model_name = "unnamed model",
-                        warmup = 0, burnin = 0, 
+                        warmup = 0, burnin = 0,
                         param_dims = list(),
                         model_code = NULL,
+                        summary=NULL,
                         note = NULL,
-                        sampler_params = NULL, 
+                        sampler_params = NULL,
                         algorithm = NULL,
                         max_treedepth = NULL,
                         ...) {
@@ -179,7 +182,7 @@ setMethod(
     is3D <- isTRUE(length(dim(X)) == 3)
     if (!is3D)
       stop ("'X' must have 3 dimensions.")
-    
+
     if (is.null(dimnames(X)[[3]]))
       dimnames(X)[[3]] <- paste0("V", seq_len(dim(X)[3]))
     param_names <- dimnames(X)[[3]]
@@ -188,27 +191,36 @@ setMethod(
       chains = paste0("chain:", seq_len(ncol(X))),
       parameters = param_names
     )
-    
+
     sp <- .validate_sampler_params(
-      sampler_params, 
-      n_chain = ncol(X), 
-      n_iter = nrow(X), 
+      sampler_params,
+      n_chain = ncol(X),
+      n_iter = nrow(X),
       algorithm = algorithm
     )
-    
+
     n_warmup <- .deprecate_burnin(burnin, warmup)
+    if(is.null(summary)){
+      summary <- shinystan_monitor(X, warmup = n_warmup)
+    } else {
+      if(class(summary)[1]!='simsummary'){
+        stop("summary not a valid object from rstan::monitor; fix or specify as NULL")
+      }
+      summary <- as.matrix(summary)[,1:10]
+    }
+
     sso <- shinystan(
       model_name = model_name,
       param_names = param_names,
       param_dims = .set_param_dims(param_dims, param_names),
       posterior_sample = X,
       sampler_params = sp,
-      summary = shinystan_monitor(X, warmup = n_warmup),
+      summary = summary,
       n_chain = ncol(X),
       n_iter = nrow(X),
       n_warmup = n_warmup
     )
-    
+
     if (!is.null(sampler_params)) {
       if (is.null(algorithm)) {
         stop("If 'sampler_params' is specified then 'algorithm' can't be NULL.")
@@ -229,7 +241,7 @@ setMethod(
     if (!is.null(model_code))
       sso <- suppressMessages(model_code(sso, code = model_code))
     sso <- .rename_scalar(sso, oldname = "lp__", newname = "log-posterior")
-    
+
     return(sso)
   }
 )
@@ -240,16 +252,16 @@ setMethod(
     if (burnin == 0) {
       return(0)
     } else {
-      warning("The 'burnin' argument is deprecated and will be removed ", 
-              "in a future release. Use the 'warmup' argument instead.", 
+      warning("The 'burnin' argument is deprecated and will be removed ",
+              "in a future release. Use the 'warmup' argument instead.",
               call. = FALSE)
       return(burnin)
     }
   } else if (burnin == 0) {
     return(warmup)
   } else {
-    stop("'burnin' and 'warmup' can't both be specified. ", 
-         "'burnin' is deprecated. Please use 'warmup' instead.", 
+    stop("'burnin' and 'warmup' can't both be specified. ",
+         "'burnin' is deprecated. Please use 'warmup' instead.",
          call. = FALSE)
   }
 }
@@ -261,13 +273,13 @@ setMethod(
            algorithm = c("NUTS", "HMC")) {
     if (is.null(x))
       return(list(NA))
-    
+
     if (!is.list(x) || length(x) != n_chain || !all(sapply(x, is.matrix)))
       stop("'sampler_params' must be a list of matrices with one matrix per chain.")
     if (!all(sapply(x, function(xj) nrow(xj) == n_iter)))
       stop("Each matrix in 'sampler_params' must have number of rows ",
            "equal to number of iterations in 'X'.")
-    
+
     nms <- sapply(x, colnames)
     if (!is.character(nms))
       stop("Matrices in 'sampler_params' must have column names.")
@@ -275,7 +287,7 @@ setMethod(
       if (!all.equal(nms[, 1], nms[, j]))
         stop("All matrices in 'sampler_params' must have the same column names.")
     }
-    
+
     alg <- match.arg(algorithm)
     if (alg == "NUTS") {
       nuts_nms <-
@@ -288,14 +300,14 @@ setMethod(
           "energy__"
         )
       if (!all(nms[, 1] %in% nuts_nms))
-        stop("For NUTS algorithm the following parameters must be included ", 
+        stop("For NUTS algorithm the following parameters must be included ",
              "in 'sampler_params': ", paste(nuts_nms, collapse = ", "))
     }
-    
+
     return(x)
   }
 
-.set_param_dims <- function(param_dims = list(), 
+.set_param_dims <- function(param_dims = list(),
                             param_names = character(length(param_dims))) {
   if (!length(param_dims)) {
     param_dims <- list()
@@ -309,7 +321,7 @@ setMethod(
     for (i in which(zeros))
       param_dims[[i]] <- numeric(0)
   }
-  param_dims 
+  param_dims
 }
 
 
@@ -319,9 +331,9 @@ setMethod(
 #'   should contain the simulations for an individual chain and all of the
 #'   matrices should have the same number of iterations (rows) and parameters
 #'   (columns). Parameters should have the same names and be in the same order.
-#'   
-#' @examples 
-#' \dontrun{   
+#'
+#' @examples
+#' \dontrun{
 #' ########################
 #' ### list of matrices ###
 #' ########################
@@ -331,13 +343,13 @@ setMethod(
 #' chain2 <- cbind(beta1 = rnorm(100), beta2 = rnorm(100), sigma = rexp(100))
 #' sso <- as.shinystan(list(chain1, chain2))
 #' launch_shinystan(sso)
-#' 
+#'
 #' # We can also specify some or all of the optional arguments
 #' # note: in order to use param_dims we need to rename 'beta1' and 'beta2'
 #' # to 'beta[1]' and 'beta[2]'
 #' colnames(chain1) <- colnames(chain2) <- c(paste0("beta[",1:2,"]"), "sigma")
-#' sso2 <- as.shinystan(list(chain1, chain2), 
-#'                      model_name = "Example", warmup = 0, 
+#' sso2 <- as.shinystan(list(chain1, chain2),
+#'                      model_name = "Example", warmup = 0,
 #'                      param_dims = list(beta = 2, sigma = 0))
 #' launch_shinystan(sso2)
 #' }
@@ -351,18 +363,18 @@ setMethod(
                         param_dims = list(),
                         model_code = NULL,
                         note = NULL,
-                        sampler_params = NULL, 
-                        algorithm = NULL, 
+                        sampler_params = NULL,
+                        algorithm = NULL,
                         max_treedepth = NULL,
                         ...) {
     validate_model_code(model_code)
     if (!length(X))
       stop('List is empty.')
-    
+
     dims <- sapply(X, function(x) length(dim(x)))
     if (!isTRUE(all(dims == 2)))
       stop("All elements of X should be matrices / 2-D arrays.")
-    
+
     nChain <- length(X)
     for (i in seq_len(nChain)) {
       nms <- colnames(as.matrix(X[[i]]))
@@ -372,7 +384,7 @@ setMethod(
           "Check the column names for the matrices in your list of chains."
         )
     }
-    
+
     if (nChain == 1) {
       n_iter <- nrow(X[[1]])
       param_names <- colnames(X[[1]])
@@ -423,9 +435,9 @@ setMethod(
 
 # as.shinystan (mcmc.list) -----------------------------------------------
 setOldClass("mcmc.list")
-#' @describeIn as.shinystan Create a \code{shinystan} object from an 
+#' @describeIn as.shinystan Create a \code{shinystan} object from an
 #'   \code{mcmc.list} object (\pkg{coda}).
-#' 
+#'
 setMethod(
   "as.shinystan",
   signature = "mcmc.list",
@@ -438,7 +450,7 @@ setMethod(
                         ...) {
     check_suggests("coda")
     validate_model_code(model_code)
-    
+
     if (length(X) == 1) {
       return(
         as.shinystan(
@@ -452,7 +464,7 @@ setMethod(
         )
       )
     }
-    
+
     posterior <- array(
       NA,
       dim = c(coda::niter(X), coda::nvar(X), coda::nchain(X)),
@@ -464,7 +476,7 @@ setMethod(
     )
     for (c in seq_len(coda::nchain(X)))
       posterior[, , c] <- X[[c]]
-    
+
     posterior <- aperm(drop(posterior), c(1, 3, 2))
     dimnames(posterior) <- list(
       iterations = seq_len(nrow(posterior)),
@@ -472,7 +484,7 @@ setMethod(
       parameters = dimnames(posterior)[[3]]
     )
     param_names <- dimnames(X[[1]])[[2]]
-    
+
     sso <- shinystan(
       model_name = model_name,
       param_names = param_names,
@@ -487,7 +499,7 @@ setMethod(
       sso <- suppressMessages(notes(sso, note = note, replace = TRUE))
     if (!is.null(model_code))
       sso <- suppressMessages(model_code(sso, code = model_code))
-    
+
     return(sso)
   }
 )
@@ -514,8 +526,8 @@ setClass("stanfit", getClass("stanfit", where = getNamespace("rstan")))
 #'   \code{stanfit} object (\pkg{\link[rstan]{rstan}}). Fewer optional arguments
 #'   are available for this method because all important information can be
 #'   taken automatically from the \code{stanfit} object.
-#'   
-#' @param pars For stanfit objects (\pkg{rstan}), an optional character vector 
+#'
+#' @param pars For stanfit objects (\pkg{rstan}), an optional character vector
 #'   specifying which parameters should be included in the \code{shinystan}
 #'   object.
 #'
@@ -528,7 +540,7 @@ setClass("stanfit", getClass("stanfit", where = getNamespace("rstan")))
 #' fit <- stan_demo("eight_schools")
 #' sso <- as.shinystan(fit, model_name = "example")
 #' }
-#' 
+#'
 setMethod(
   "as.shinystan",
   signature = "stanfit",
@@ -545,20 +557,20 @@ setMethod(
       if (!"lp__" %in% pars)
         pars <- c(pars, "lp__")
     }
-      
+
     posterior <-
       rstan::extract(X,
                      pars = pars,
                      permuted = FALSE,
                      inc_warmup = TRUE)
-    
+
     param_dims <- X@sim$dims_oi
     if (!missing(pars)) {
       pd <- which(names(param_dims) %in% pars)
       if (length(pd))
         param_dims <- param_dims[pd]
     }
-    
+
     sso <- shinystan(
       model_name = model_name,
       param_names = dimnames(posterior)[[3L]],
@@ -586,27 +598,27 @@ setMethod(
 )
 
 # rename a scalar parameter in a shinystan object
-.rename_scalar <- function(sso, 
-                           oldname = "lp__", 
+.rename_scalar <- function(sso,
+                           oldname = "lp__",
                            newname = "log-posterior") {
   p <- which(sso@param_names == oldname)
-  if (identical(integer(0), p)) 
+  if (identical(integer(0), p))
     return(sso)
-  
-  sso@param_names[p] <- 
+
+  sso@param_names[p] <-
     dimnames(sso@posterior_sample)$parameters[p] <-
-    names(sso@param_dims)[which(names(sso@param_dims) == oldname)] <- 
+    names(sso@param_dims)[which(names(sso@param_dims) == oldname)] <-
     rownames(sso@summary)[p] <- newname
   return(sso)
 }
 
 # Get stan_args from stanfit object
 # @param x stanfit object
-# @param which which of the entries in x@stan_args[[1]] is of interest? If NULL 
+# @param which which of the entries in x@stan_args[[1]] is of interest? If NULL
 #   the full list x@stan_args is returned
 .stan_args <- function(x, which = NULL) {
   stan_args <- x@stan_args[[1L]]
-  if (!is.null(which)) 
+  if (!is.null(which))
     return(stan_args[[which]])
   stan_args
 }
@@ -650,11 +662,11 @@ setMethod(
   } else {
     .stan_args(x, "algorithm")
   }
-  
+
   if (.used_vb(x) || !(algo %in% c("NUTS", "HMC")))
     warning("Many features are only available for models fit using
             algorithm NUTS or algorithm HMC.", call. = FALSE)
-  
+
   algo
 }
 
@@ -674,8 +686,8 @@ setMethod(
   if (.used_vb(x))
     return(list(NA))
   sp <- suppressWarnings(rstan::get_sampler_params(x))
-  sp <- .rename_sampler_param(sp, 
-                              oldname = "n_divergent__", 
+  sp <- .rename_sampler_param(sp,
+                              oldname = "n_divergent__",
                               newname = "divergent__")
   sp
 }
@@ -697,14 +709,14 @@ setMethod(
 .rstan_warmup <- function(x) {
   warmup <- if (.from_cmdstan(x))
     x@sim$warmup2[1L] else x@sim$warmup
-  
+
   saved <- .stan_args(x, "save_warmup")
-  if (!is.null(saved) && !saved) 
+  if (!is.null(saved) && !saved)
     warmup <- 0
-  
-  if (.from_cmdstan(x)) 
+
+  if (.from_cmdstan(x))
     return(warmup)
-  
+
   floor(warmup / x@sim$thin)
 }
 
@@ -728,17 +740,17 @@ setMethod(
 setOldClass("stanreg")
 #' @describeIn as.shinystan Create a \code{shinystan} object from a
 #'   \code{stanreg} object (\pkg{\link[rstanarm]{rstanarm}}).
-#'   
-#' @param ppd For \code{stanreg} objects (\pkg{rstanarm}), \code{ppd} 
-#'   (logical) indicates whether to draw from the posterior predictive 
-#'   distribution before launching the app. The default is \code{TRUE}, 
-#'   although for very large objects it can be convenient to set it to 
-#'   \code{FALSE} as drawing from the posterior predictive distribution can be 
+#'
+#' @param ppd For \code{stanreg} objects (\pkg{rstanarm}), \code{ppd}
+#'   (logical) indicates whether to draw from the posterior predictive
+#'   distribution before launching the app. The default is \code{TRUE},
+#'   although for very large objects it can be convenient to set it to
+#'   \code{FALSE} as drawing from the posterior predictive distribution can be
 #'   time consuming. If \code{ppd} is \code{TRUE} then graphical posterior
 #'   predictive checks are available when 'ShinyStan' is launched.
-#' @param seed Passed to \code{\link[rstanarm]{pp_check}} (\pkg{rstanarm}) if 
+#' @param seed Passed to \code{\link[rstanarm]{pp_check}} (\pkg{rstanarm}) if
 #'   \code{ppd} is \code{TRUE}.
-#'   
+#'
 #' @examples
 #' \dontrun{
 #' ######################
@@ -761,33 +773,33 @@ setMethod(
                         ...) {
     check_suggests("rstanarm")
     sso <- as.shinystan(X$stanfit, ...)
-    
+
     mname <- if (!is.null(model_name))
       model_name else paste0("rstanarm model (", sso@model_name, ")")
     sso <- suppressMessages(model_name(sso, mname))
-    
+
     if (!is.null(note))
       sso <- suppressMessages(notes(sso, note, replace = TRUE))
-    
+
     param_names <- slot(sso, "param_names")
-    sel <- grep(":_NEW_", dimnames(slot(sso, "posterior_sample"))[[3L]], 
+    sel <- grep(":_NEW_", dimnames(slot(sso, "posterior_sample"))[[3L]],
                 fixed = TRUE)
     if (length(sel)) {
       param_names <- param_names[-sel]
-      slot(sso, "posterior_sample") <- 
+      slot(sso, "posterior_sample") <-
         slot(sso, "posterior_sample")[, , -sel, drop = FALSE]
-      slot(sso, "summary")  <- 
+      slot(sso, "summary")  <-
         slot(sso, "summary")[-sel, , drop = FALSE]
     }
     param_dims <- rep(list(numeric(0)), length(param_names))
     names(param_dims) <- param_names
-    
+
     slot(sso, "param_names") <- param_names
     slot(sso, "param_dims") <- param_dims
     slot(sso, "misc")[["stanreg"]] <- TRUE
     if (isTRUE(ppd))
       slot(sso, "misc")[["pp_check_plots"]] <- .rstanarm_pp_checks(X, seed)
-    
+
     return(sso)
   }
 )
@@ -799,7 +811,7 @@ setMethod(
   )
   ppc <- rstanarm::pp_check
   pp_check_plots <- list()
-  
+
   pp_check_plots[["pp_check_hist"]] <-
     do.call("ppc",
             list(
@@ -817,7 +829,7 @@ setMethod(
               seed = seed
             ))
   pp_check_plots[["pp_check_resid"]] <-
-    do.call("ppc", 
+    do.call("ppc",
             list(
               object = X,
               plotfun = "error_hist",
@@ -841,7 +853,7 @@ setMethod(
               seed = seed
             ))
   pp_check_plots[["pp_check_stat_sd"]] <-
-    do.call("ppc", 
+    do.call("ppc",
             list(
               object = X,
               plotfun = "stat",
@@ -849,7 +861,7 @@ setMethod(
               seed = seed
             ))
   pp_check_plots[["pp_check_stat_min"]] <-
-    do.call("ppc", 
+    do.call("ppc",
             list(
               object = X,
               plotfun = "stat",
@@ -857,13 +869,13 @@ setMethod(
               seed = seed
             ))
   pp_check_plots[["pp_check_stat_max"]] <-
-    do.call("ppc", 
+    do.call("ppc",
             list(
               object = X,
               plotfun = "stat",
               stat = "max",
               seed = seed
             ))
-  
+
   pp_check_plots
 }
